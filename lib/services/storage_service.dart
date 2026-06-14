@@ -19,6 +19,53 @@ class StorageService {
     return _db!;
   }
 
+  /// Database version. Bump this when the schema changes.
+  static const int _dbVersion = 1;
+
+  /// Ordered list of migrations. Index = version number (1-based).
+  /// Each entry is a list of SQL statements to run for that version.
+  static final Map<int, List<String>> _migrations = {
+    1: [
+      '''
+      CREATE TABLE contacts (
+        peer_id TEXT PRIMARY KEY,
+        nickname TEXT NOT NULL,
+        public_key TEXT NOT NULL,
+        is_online INTEGER DEFAULT 0,
+        added_at INTEGER NOT NULL,
+        last_seen INTEGER
+      )
+      ''',
+      '''
+      CREATE TABLE messages (
+        id TEXT PRIMARY KEY,
+        sender_id TEXT NOT NULL,
+        receiver_id TEXT NOT NULL,
+        ciphertext TEXT NOT NULL,
+        timestamp INTEGER NOT NULL,
+        seq INTEGER NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        chat_with TEXT NOT NULL
+      )
+      ''',
+      '''
+      CREATE TABLE identity (
+        id INTEGER PRIMARY KEY DEFAULT 1,
+        peer_id TEXT NOT NULL,
+        public_hex TEXT NOT NULL,
+        private_hex TEXT NOT NULL
+      )
+      ''',
+      'CREATE INDEX idx_messages_chat ON messages(chat_with, timestamp)',
+      'CREATE INDEX idx_messages_status ON messages(status)',
+    ],
+    // Example for future v2:
+    // 2: [
+    //   'ALTER TABLE contacts ADD COLUMN avatar TEXT',
+    //   'ALTER TABLE messages ADD COLUMN edited_at INTEGER',
+    // ],
+  };
+
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
     final dbName = profile == 'default' ? 'p2p_talk.db' : 'p2p_talk_$profile.db';
@@ -26,47 +73,26 @@ class StorageService {
 
     return openDatabase(
       path,
-      version: 1,
+      version: _dbVersion,
       onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE contacts (
-            peer_id TEXT PRIMARY KEY,
-            nickname TEXT NOT NULL,
-            public_key TEXT NOT NULL,
-            is_online INTEGER DEFAULT 0,
-            added_at INTEGER NOT NULL,
-            last_seen INTEGER
-          )
-        ''');
-
-        await db.execute('''
-          CREATE TABLE messages (
-            id TEXT PRIMARY KEY,
-            sender_id TEXT NOT NULL,
-            receiver_id TEXT NOT NULL,
-            ciphertext TEXT NOT NULL,
-            timestamp INTEGER NOT NULL,
-            seq INTEGER NOT NULL,
-            status TEXT NOT NULL DEFAULT 'pending',
-            chat_with TEXT NOT NULL
-          )
-        ''');
-
-        await db.execute('''
-          CREATE TABLE identity (
-            id INTEGER PRIMARY KEY DEFAULT 1,
-            peer_id TEXT NOT NULL,
-            public_hex TEXT NOT NULL,
-            private_hex TEXT NOT NULL
-          )
-        ''');
-
-        await db.execute(
-            'CREATE INDEX idx_messages_chat ON messages(chat_with, timestamp)');
-        await db.execute(
-            'CREATE INDEX idx_messages_status ON messages(status)');
+        await _runMigrations(db, 1, version);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await _runMigrations(db, oldVersion + 1, newVersion);
       },
     );
+  }
+
+  /// Runs all migrations from [from] to [to] (inclusive).
+  Future<void> _runMigrations(Database db, int from, int to) async {
+    for (int v = from; v <= to; v++) {
+      final statements = _migrations[v];
+      if (statements != null) {
+        for (final sql in statements) {
+          await db.execute(sql);
+        }
+      }
+    }
   }
 
   // ---- Identity ----
