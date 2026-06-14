@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/avatar.dart';
 import '../../models/contact.dart';
 import '../../models/message.dart';
 import '../../p2p/connection_manager.dart';
@@ -73,6 +74,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(10),
+          child: AvatarGenerator.build(title, radius: 16),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/avatar.dart';
 import '../../models/contact.dart';
 import '../../p2p/connection_manager.dart';
 import '../../services/chat_service.dart';
@@ -96,12 +97,24 @@ class _ContactTile extends StatelessWidget {
     final isConnected = contact.isOnline;
 
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: isConnected ? Colors.green[100] : Colors.grey[200],
-        child: Icon(
-          isConnected ? Icons.person : Icons.person_outline,
-          color: isConnected ? Colors.green[700] : Colors.grey[500],
-        ),
+      leading: Stack(
+        children: [
+          AvatarGenerator.build(contact.nickname),
+          if (isConnected)
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+              ),
+            ),
+        ],
       ),
       title: Text(contact.nickname),
       subtitle: Row(
