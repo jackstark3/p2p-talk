@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills *)",
+      "Bash(git clone *)",
+      "Bash(flutter --version)",
+      "Bash(where flutter *)",
+      "Read(//c/flutter/bin/**)",
+      "Read(//c/src/flutter/bin/**)",
+      "Read(//d/flutter/bin/**)",
+      "Bash(cmd.exe /c \"where flutter\")",
+      "Read(//c/Users/dell/flutter/bin/**)",
+      "Read(//c/Program Files/flutter/bin/**)",
+      "Bash(find /c -maxdepth 3 -name \"flutter.bat\")",
+      "Bash(go version *)",
+      "WebSearch",
+      "Bash(curl -L -o /d/code/p2p/talk/tmp/cmdline-tools.zip \"https://dl.google.com/android/repository/commandlinetools-win-11076708_latest.zip\" --connect-timeout 10 --max-time 30)",
+      "Bash(java -version)",
+      "Read(//c/Program Files/**)",
+      "Bash(\"/d/Jave/bin/java.exe\" -version)",
+      "Bash(curl -L -o /d/code/p2p/talk/tmp/jdk17.zip \"https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9/OpenJDK17U-jdk_x64_windows_hotspot_17.0.9_9.zip\")",
+      "Bash(cmd.exe /c 'setx JAVA_HOME \"D:\\\\Jdk17\"')",
+      "Bash(cmd.exe /c 'setx ANDROID_HOME \"D:\\\\Android\\\\SDK\"')",
+      "Bash(cmd.exe /c 'echo %PATH%')",
+      "Bash(powershell -Command ' *)",
+      "Bash(cmd.exe /c \"echo JAVA_HOME=%JAVA_HOME%\")",
+      "Bash(cmd.exe /c \"echo ANDROID_HOME=%ANDROID_HOME%\")",
+      "Bash(cmd.exe /c \"where flutter 2>&1\")",
+      "Bash(cmd.exe /c \"where go 2>&1\")",
+      "Bash(powershell -Command \"Get-Process p2p_talk -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime\")",
+      "Read(//c/Users/dell/AppData/Local/Pub/Cache/hosted/pub.flutter-io.cn/pointycastle-3.9.1/lib/src/registry/**)",
+      "Bash(cmd.exe /c 'start \"\" \"D:\\\\code\\\\p2p\\\\talk\\\\build\\\\windows\\\\x64\\\\runner\\\\Release\\\\p2p_talk.exe\"')",
+      "Bash(powershell -Command \"Get-Process p2p_talk -ErrorAction SilentlyContinue | Select-Object Id, ProcessName\")",
+      "Bash(powershell -Command \"Get-Process p2p_talk -ErrorAction SilentlyContinue | Stop-Process -Force\")",
+      "Bash(powershell -Command \"Get-Process p2p_talk -ErrorAction SilentlyContinue | Select-Object Id\")",
+      "Bash(curl -s http://localhost:8080/health)",
+      "Bash(powershell -Command \"Get-Process p2p_talk -ErrorAction SilentlyContinue | Measure-Object | Select-Object -ExpandProperty Count\")",
+      "Bash(cmd.exe /c 'start \"SignalingServer\" /MIN \"D:\\\\code\\\\p2p\\\\talk\\\\signaling_server\\\\signaling-server.exe\"')",
+      "Bash(cmd.exe /c 'start \"P2P Talk 1\" \"D:\\\\code\\\\p2p\\\\talk\\\\build\\\\windows\\\\x64\\\\runner\\\\Release\\\\p2p_talk.exe\"')",
+      "Bash(cmd.exe /c 'start \"P2P Talk 2\" \"D:\\\\code\\\\p2p\\\\talk\\\\build\\\\windows\\\\x64\\\\runner\\\\Release\\\\p2p_talk.exe\"')"
+    ]
+  }
+}
